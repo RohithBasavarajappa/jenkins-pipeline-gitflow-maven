@@ -7,7 +7,13 @@ stage('build') {
         checkout scm
         def v = version()
         currentBuild.displayName = "${env.BRANCH_NAME}-${v}-${env.BUILD_NUMBER}"
-        mvn "clean verify"
+        git url: 'https://github.com/cyrille-leclerc/multi-module-maven-project'
+        withMaven(
+        maven: 'maven-3',
+        mavenLocalRepo: '.repository',
+        mavenSettingsConfig: 'my-maven-settings' ) {
+        sh "mvn clean verify"
+        }
     }
 }
 
